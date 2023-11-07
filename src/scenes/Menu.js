@@ -10,9 +10,6 @@ class Menu extends Phaser.Scene{
     this.load.audio('warning', './assets//laserShoot.wav');
     this.load.audio('collect', './assets/pickupCoin.wav');
     this.load.audio('bgm', './assets/bgm.wav');
-    
-
-    
 
 
 

@@ -6,6 +6,9 @@
 //technically insteresting aspect: 
 // I used two different scenes to implement an interactive tutorial when the player starts the game. 
 // I was also really proud of the progress bar I implemented in the game
+// The progress decreases the same amount throughout the game, 
+// until the very end where it decreases at a slower rate. This keeps the player
+// alive longer, but on the edge.
 
 //Visual style
 //I animated my sprites and powerups and drew everything by hand, including the title screen and background. I wanted everything to be cohesive.
