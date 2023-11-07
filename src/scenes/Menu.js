@@ -73,4 +73,84 @@ class Menu extends Phaser.Scene{
       });
 
       //credits button
-      this.cred = this.add.sprite(game.config.width/2.8,game.config.heig
+      this.cred = this.add.sprite(game.config.width/2.8,game.config.height - borderUISize*2.7,'credits_button');
+      this.cred.setFrame(0);
+      this.cred.setScale(1);
+
+
+      this.hs = this.add.text(game.config.width / 4.7,game.config.height - 45, "HIGH SCORE: " + Phaser.Math.RoundTo(high_score, 0), {fontSize:'30px', fontFamily: "Love Ya Like A Sister", color: "#e6ad12"});
+      this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+      //controls button
+      this.c = this.add.sprite(game.config.width/2.8,game.config.height - borderUISize*5,'controls');
+      this.c.setFrame(0);
+      this.c.setScale(2);
+
+      //instructions
+      this.in = this.add.sprite(game.config.width/2,game.config.height/2,"instructions");
+      this.in.setScale(1);
+      this.in.setVisible(false);
+
+      //click buttins
+      this.c.on('pointerover', () => {
+        this.c.setFrame(1);
+      } );
+      this.c.on('pointerout', () => {
+        this.c.setFrame(0);
+      });
+      this.c.setInteractive();
+      this.c.on('pointerdown', () => {
+        this.sound.play('menu_select');
+        game.settings = {
+          multiplier: 1.5,
+          player_velocity: 100,
+          bg_speed: 2,
+          gameTimer: 45000    
+        }
+        this.inst = 1;
+      });
+
+
+      
+
+      //instructions
+      this.inc = this.add.sprite(game.config.width/2,game.config.height/2,"credz");
+      this.inc.setScale(1);
+      this.inc.setVisible(false);
+
+      //click buttins
+      this.cred.setInteractive();
+      this.cred.on('pointerdown', () => {
+        this.sound.play('menu_select');
+        game.settings = {
+          multiplier: 1.5,
+          player_velocity: 100,
+          bg_speed: 2,
+          gameTimer: 45000    
+        }
+        this.credpop = 1;
+      });
+      
+
+      
+  }
+
+  update(){
+    if(this.inst == 1){
+      this.in.setVisible(true);
+      if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
+        this.inst = 0;
+        this.in.setVisible(false);
+      } 
+    }
+
+    if(this.credpop == 1){
+      this.inc.setVisible(true);
+      if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
+        this.credpop = 0;
+        this.inc.setVisible(false);
+      } 
+    }
+  }
+
+
+}

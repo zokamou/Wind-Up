@@ -174,7 +174,6 @@ class Play extends Phaser.Scene{
         }
         if(this.checkCollision(this.main_soldier, this.crank_pu)) {
             this.sound.play('collect');
-            this.bgM.play();
             this.crank_pu.x += game.config.width;
             if (this.crank_prog > 280){
                 this.crank_prog = 300;
