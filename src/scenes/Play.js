@@ -21,7 +21,6 @@ class Play extends Phaser.Scene{
         this.floor = this.add.tileSprite(0,0,640, 480, 'floor').setOrigin(0,0);
         
         //add the soldier
-        this.crank_pu = new Crank(this, game.config.width *2, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 0).setOrigin(0, 0);
         this.blocks_lower = new BlocksUpper(this, game.config.width *1,200, 'blocks', 0).setOrigin(0, 0);
         this.blocks_lower.setScale(.75);
         this.blocks_lower.body.setSize(50,95);
@@ -31,6 +30,7 @@ class Play extends Phaser.Scene{
         this.blocks_upper.setScale(.75)
         this.blocks_upper.body.setSize(50,95);
         this.blocks_upper.body.setOffset(8,10);
+        this.crank_pu = new Crank(this, game.config.width *2, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 2).setOrigin(0, 0);
 
         this.main_soldier = new Soldier(this, -50,150, 'soldier', 0).setOrigin(0, 0);
         this.main_soldier.body.setSize(25,50);
@@ -61,6 +61,10 @@ class Play extends Phaser.Scene{
         this.game_over.setScale(1);
         this.game_over.setVisible(false);
 
+        this.final = this.add.text(game.config.width/3.9, game.config.height/2.7, "SCORE: " + 555, {align: "center",fontSize:'70px', fontFamily: "Love Ya Like A Sister", color: "black"});
+        this.final.setVisible(false);
+        this.hs_banner = this.add.text(game.config.width/2.9, game.config.height/1.9, "HIGH SCORE!", {align: "center",fontSize:'40px', fontFamily: "Love Ya Like A Sister", color: "red"});
+        this.hs_banner.setVisible(false);
         //this.add.rectangle(20, 22, 100,40, 0xdbc6a7).setOrigin(0, 0);
         //this.bar.destroy();
 
@@ -76,18 +80,19 @@ class Play extends Phaser.Scene{
         this.anims.create({
             key: 'crank_anim',
             frames: this.anims.generateFrameNumbers('crank', { start: 0, end: 3, first: 0}),
-            frameRate: 6,
+            frameRate: 10,
             repeat: -1
         });
 
         //play animations
-        this.main_soldier.anims.play('walking')
-        this.crank_pu.anims.play('crank_anim')
+        this.crank_pu.anims.play('crank_anim');
+        this.main_soldier.anims.play('walking');
+        //this.crank_pu.anims.play('crank_anim');
 
-        this.physics.world.setBounds(-50,40, 640, 430);
+        this.physics.world.setBounds(-50,40, 640, 420);
         //this.physics.world.gravity.y = 150;
 
-        this.main_soldier.setVelocity(0,0)
+        this.main_soldier.setVelocity(0,0);
         this.crank_prog = 300;
         this.score = 0;
         this.intro = 0;
@@ -104,7 +109,7 @@ class Play extends Phaser.Scene{
 
         this.score_txt.setText("Score: " + Phaser.Math.RoundTo(this.score, 0));
         if (this.crank_prog > 0 && this.intro == 1 && this.go == 0){
-            game.settings.multiplier += .0001
+            game.settings.multiplier += .0005
             this.score += .05;
             if(this.crank_prog > 25){
                 this.crank_prog -= .1
@@ -134,7 +139,7 @@ class Play extends Phaser.Scene{
 
         //walking in
         if(this.main_soldier.x < 75){
-            this.main_soldier.x += 1.5
+            this.main_soldier.x += 2
 
         } else{
             this.intro = 1
@@ -184,6 +189,12 @@ class Play extends Phaser.Scene{
             this.go = 1;
             this.main_soldier.setVelocity(0,0);
             this.game_over.setVisible(true);
+            this.final.setText("SCORE: " + Phaser.Math.RoundTo(this.score, 0));
+            this.final.setVisible(true);
+            if(this.score > high_score){
+                high_score = this.score;
+                this.hs_banner.setVisible(true);
+            }
             if (Phaser.Input.Keyboard.JustDown(this.keyB)) {
                 this.scene.start('menuScene');
             } 

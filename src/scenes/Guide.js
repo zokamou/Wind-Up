@@ -4,6 +4,7 @@ class Guide extends Phaser.Scene{
     }
 
     preload() {
+        this.load.image('goodluck', './assets/good_luck.png')
         this.load.image('livingroom', './assets/livingroom.png')
         this.load.image('floor', './assets/floor.png')
         this.load.image('mouse', './assets/mouse.png')
@@ -38,6 +39,10 @@ class Guide extends Phaser.Scene{
         this.cranki = this.add.sprite(game.config.width/2, game.config.height/3,"crankinst");
         this.cranki.setScale(.5)
         this.cranki.setVisible(false);
+        
+        this.gl = this.add.sprite(game.config.width-100, game.config.height/3,"goodluck");
+        this.gl.setScale(.5)
+        this.gl.setVisible(false);
 
         this.ci = this.add.sprite(game.config.width - 100, game.config.height - 50,"cont");
         this.ci.setScale(.5)
@@ -51,13 +56,6 @@ class Guide extends Phaser.Scene{
             repeat: -1
         });
 
-        this.anims.create({
-            key: 'crank_anim',
-            frames: this.anims.generateFrameNumbers('crank', { start: 0, end: 3, first: 0}),
-            frameRate: 6 * this.game.settingsmultiplier * .75,
-            repeat: -1
-        });
-
 
         //add space key
 
@@ -66,7 +64,7 @@ class Guide extends Phaser.Scene{
         this.main_soldier.anims.play('walking');
         //this.crank_pu.anims.play('crank_anim')
 
-        this.physics.world.setBounds(-50,40, 640, 430);
+        this.physics.world.setBounds(-50,40, 800, 430);
         //this.physics.world.gravity.y = 150;
         this.main_soldier.setVelocity(0,0)
 
@@ -85,8 +83,8 @@ class Guide extends Phaser.Scene{
 
         // walking in
         if(this.tutorial == 0){
-            if(this.main_soldier.x < 75){
-                this.main_soldier.x += 1.5;
+            if(this.main_soldier.x < 125){
+                this.main_soldier.x += 2;
             } else {
                 // show mouse
                 if (this.mouse == 0){
@@ -131,6 +129,14 @@ class Guide extends Phaser.Scene{
                 } 
             }
             
+        }
+        if(this.cranky == 1){
+            this.main_soldier.x += 2.5
+            this.gl.setVisible(true);
+
+        }
+        if(this.main_soldier.x > 650){
+            this.scene.start('playScene');
         }
         if (this.controls == 1){
             this.livingroom.tilePositionX += game.settings.bg_speed / 4 * game.settings.multiplier;

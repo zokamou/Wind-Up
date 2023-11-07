@@ -8,13 +8,13 @@ let config = {
     render: {
         pixelArt: true
     },
-    zoom: .75,
+    zoom: 1.25,
     width: 640,
     height: 480,
     backgroundColor: "#482016",
     physics: {
         default: 'arcade',
-        arcade: { debug: true }
+        arcade: { debug: false }
     },
     scene: [Menu, Guide, Play]
 }

@@ -12,6 +12,7 @@ class Menu extends Phaser.Scene{
 
     this.load.image("blocks", './assets/blocks.png', 72,84)
     this.load.image("title", './assets/title.png', 128,64)
+    this.load.image("instructions", './assets/instructions.png', 128,64)
 
 
   }
@@ -21,6 +22,7 @@ class Menu extends Phaser.Scene{
       //blocks
       this.b = this.add.sprite(game.config.width-borderUISize*3,game.config.height - borderUISize*6,"blocks");
       this.b.setScale(4);
+
       
       //title
       this.t = this.add.sprite(game.config.width/2.5, game.config.height/4,"title");
@@ -45,21 +47,28 @@ class Menu extends Phaser.Scene{
           bg_speed: 2,
           gameTimer: 45000    
         }
-        // if(tut_tog == 0){
-        //   tut_tog = 1;
-        //   this.scene.start('guideScene');
-        // }else{
-        //   this.scene.start('playScene');
-        // }
-        this.scene.start('playScene');
+        if(tut_tog == 0){
+          tut_tog = 1;
+          this.scene.start('guideScene');
+        }else{
+          this.scene.start('playScene');
+        }
+       // this.scene.start('playScene');
       });
 
-      this.hs = this.add.text(game.config.width / 4.7,game.config.height - 75, "HIGH SCORE: " + high_score, {fontSize:'30px', fontFamily: "Love Ya Like A Sister", color: "#e6ad12"});
-
+      this.hs = this.add.text(game.config.width / 4.7,game.config.height - 75, "HIGH SCORE: " + Phaser.Math.RoundTo(high_score, 0), {fontSize:'30px', fontFamily: "Love Ya Like A Sister", color: "#e6ad12"});
+      this.keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
       //controls button
       this.c = this.add.sprite(game.config.width/2.8,game.config.height - borderUISize*5,'controls');
       this.c.setFrame(0);
       this.c.setScale(2);
+
+      //instructions
+      this.in = this.add.sprite(game.config.width/2,game.config.height/2,"instructions");
+      this.in.setScale(1);
+      this.in.setVisible(false);
+
+      //click buttins
       this.c.on('pointerover', () => {
         this.c.setFrame(1);
       } );
@@ -74,15 +83,21 @@ class Menu extends Phaser.Scene{
           bg_speed: 2,
           gameTimer: 45000    
         }
-        this.scene.start('guideScene');
+        this.inst = 1;
       });
-
-
-      // define keys
-      keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-      keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+      
 
       
+  }
+
+  update(){
+    if(this.inst == 1){
+      this.in.setVisible(true);
+      if (Phaser.Input.Keyboard.JustDown(this.keyESC)) {
+        this.inst = 0;
+        this.in.setVisible(false);
+      } 
+    }
   }
 
 
