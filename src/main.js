@@ -2,6 +2,13 @@
 // Name: Zoe Feller
 // Title: Wind-Up
 // Time: ~ 8 hours
+//
+//technically insteresting aspect: 
+// uses two different scenes to implement an interactive tutorial when the player starts the game. 
+// I was also really proud of the progress bar I implemented in the game
+
+//Visual style
+//I animated my sprites and powerups and drew everything by hand, including the title screen and background! I am very proud of it.
 
 let config = {
     type: Phaser.CANVAS, 
