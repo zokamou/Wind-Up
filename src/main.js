@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------------------------------------------------------
 // Name: Zoe Feller
 // Title: Wind-Up
-// Time: ~ 8 hours
+// Time: ~ 20 hours
 //
 //technically insteresting aspect: 
 // I used two different scenes to implement an interactive tutorial when the player starts the game. 
