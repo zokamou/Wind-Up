@@ -5,6 +5,7 @@ class Guide extends Phaser.Scene{
 
     preload() {
         this.load.image('goodluck', './assets/good_luck.png')
+        this.load.audio('bgm', './assets/bgm.wav');
         this.load.image('livingroom', './assets/livingroom.png')
         this.load.image('floor', './assets/floor.png')
         this.load.image('mouse', './assets/mouse.png')
@@ -16,6 +17,10 @@ class Guide extends Phaser.Scene{
         this.load.spritesheet('blocks', './assets/blocks.png', {frameWidth: 72, frameHeight: 84, startFrame: 0, endFrame: 3})
     }
     create() { 
+        this.bgM = this.sound.add('bgm');
+        this.bgM.loop = true;
+        this.bgM.play();
+
 
         //add bg
         this.livingroom = this.add.tileSprite(0,0,640, 480, 'livingroom').setOrigin(0,0);
@@ -77,8 +82,10 @@ class Guide extends Phaser.Scene{
         this.tutorial = 0;
         this.timer = 0;
 
-    }
+        
 
+    }
+    
     update() {
 
         // walking in
@@ -92,6 +99,7 @@ class Guide extends Phaser.Scene{
                     this.mi.setVisible(true);
                     this.ci.setVisible(true);
                     if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                        this.sound.play('menu_select');
                         this.mi.setVisible(false);
                         this.ci.setVisible(false);
                         this.controls = 1;
@@ -105,6 +113,7 @@ class Guide extends Phaser.Scene{
                         this.bi.setVisible(true);
                         this.ci.setVisible(true);
                         if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                            this.sound.play('menu_select');
                             this.bi.setVisible(false);
                             this.ci.setVisible(false);
                             this.controls = 1;
@@ -120,6 +129,7 @@ class Guide extends Phaser.Scene{
                         this.cranki.setVisible(true);
                         this.ci.setVisible(true);
                         if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                            this.sound.play('menu_select');
                             this.cranki.setVisible(false);
                             this.ci.setVisible(false);
                             this.controls = 1;
@@ -136,6 +146,7 @@ class Guide extends Phaser.Scene{
 
         }
         if(this.main_soldier.x > 650){
+            this.bgM.stop();
             this.scene.start('playScene');
         }
         if (this.controls == 1){

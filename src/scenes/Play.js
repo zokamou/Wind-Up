@@ -11,10 +11,14 @@ class Play extends Phaser.Scene{
         this.load.spritesheet('crank', './assets/crank.png', {frameWidth: 63, frameHeight: 54, startFrame: 0, endFrame: 3})
         this.load.spritesheet('blocks', './assets/blocks.png', {frameWidth: 72, frameHeight: 84, startFrame: 0, endFrame: 3})
         this.load.image('gameover', './assets/gameover.png')
-
+        this.load.audio('bgm', './assets/bgm.wav');
 
     }
     create() { 
+        this.bgM = this.sound.add('bgm');
+        this.bgM.loop = true;
+        this.bgM.play();
+
 
         //add bg
         this.livingroom = this.add.tileSprite(0,0,640, 480, 'livingroom').setOrigin(0,0);
@@ -146,6 +150,8 @@ class Play extends Phaser.Scene{
         }
 
         if(this.checkCollision(this.main_soldier, this.blocks_lower)) {
+            this.sound.play('explosion');
+            this.bgM.play();
             this.blocks_lower.x +=  game.config.width;
             this.blocks_lower.y = game.config.height - (Math.random()*100) - 125
             if(this.crank_prog >= 50){
@@ -155,6 +161,8 @@ class Play extends Phaser.Scene{
             }
         }
         if(this.checkCollision(this.main_soldier, this.blocks_upper)) {
+            this.sound.play('explosion');
+            this.bgM.play();
             this.blocks_upper.x += game.config.width;
             this.blocks_upper.y = game.config.height - (Math.random()*100) - 125
             if(this.crank_prog >= 50){
@@ -164,6 +172,8 @@ class Play extends Phaser.Scene{
             }
         }
         if(this.checkCollision(this.main_soldier, this.crank_pu)) {
+            this.sound.play('collect');
+            this.bgM.play();
             this.crank_pu.x += game.config.width;
             if (this.crank_prog > 280){
                 this.crank_prog = 300;
@@ -185,8 +195,14 @@ class Play extends Phaser.Scene{
         }
 
         if(this.crank_prog <= 0){
+            
+            
             this.bar.clear()
-            this.go = 1;
+            if (this.go == 0){
+                this.sound.play('warning');
+                this.go = 1;
+            }
+            //this.go = 1;
             this.main_soldier.setVelocity(0,0);
             this.game_over.setVisible(true);
             this.final.setText("SCORE: " + Phaser.Math.RoundTo(this.score, 0));
@@ -196,9 +212,11 @@ class Play extends Phaser.Scene{
                 this.hs_banner.setVisible(true);
             }
             if (Phaser.Input.Keyboard.JustDown(this.keyB)) {
+                this.sound.play('menu_select');
                 this.scene.start('menuScene');
             } 
             if (Phaser.Input.Keyboard.JustDown(this.keySpace)) {
+                this.sound.play('menu_select');
                 this.scene.start('playScene');
             } 
         }
