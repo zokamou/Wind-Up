@@ -1,7 +1,8 @@
-class Blocks extends Phaser.GameObjects.Sprite{
+class BlocksUpper extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y, texture, frame){
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
+        scene.physics.add.existing(this);
         this.moveSpeed = 1;
     }
     update() {
@@ -9,7 +10,7 @@ class Blocks extends Phaser.GameObjects.Sprite{
         this.x -= game.settings.bg_speed * game.settings.multiplier;
 
         //wrap around from left edge to right edge 
-        if (this.x <= 0 - this.width - 700){
+        if (this.x <= 0 - this.width){
             this.reset();
         }
         //this.play('spin')
@@ -17,7 +18,7 @@ class Blocks extends Phaser.GameObjects.Sprite{
     
     reset() {
         this.x = game.config.width;
-        this.y = (borderUISize*3) + (Math.random()*7)*borderUISize
+        this.y = (Math.random() * ((game.config.height - 150) - 30) + 1) + 30
         //this.y = Math.random() * (game.config.height)-(game.gonfig.height/2) + game.gonfig.height/2;
     }
 }

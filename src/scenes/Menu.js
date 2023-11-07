@@ -45,8 +45,16 @@ class Menu extends Phaser.Scene{
           bg_speed: 2,
           gameTimer: 45000    
         }
+        // if(tut_tog == 0){
+        //   tut_tog = 1;
+        //   this.scene.start('guideScene');
+        // }else{
+        //   this.scene.start('playScene');
+        // }
         this.scene.start('playScene');
       });
+
+      this.hs = this.add.text(game.config.width / 4.7,game.config.height - 75, "HIGH SCORE: " + high_score, {fontSize:'30px', fontFamily: "Love Ya Like A Sister", color: "#e6ad12"});
 
       //controls button
       this.c = this.add.sprite(game.config.width/2.8,game.config.height - borderUISize*5,'controls');

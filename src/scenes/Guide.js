@@ -21,9 +21,9 @@ class Guide extends Phaser.Scene{
         this.floor = this.add.tileSprite(0,0,640, 480, 'floor').setOrigin(0,0);
 
         //add the soldier
-        //this.crank_pu = new Crank(this,game.config.width, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 0).setOrigin(0, 0);
+        this.crank_pu = new Crank(this,game.config.width, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 0).setOrigin(0, 0);
         //this.blocks_obs = new Blocks(this, 200,200, 'blocks', 0).setOrigin(0, 0);
-        this.main_soldier = new Soldier(this, -50,150, 'soldier', 0).setOrigin(0, 0);
+        this.main_soldier = new Soldier(this, -100,150, 'soldier', 0).setOrigin(0, 0);
 
 
         //instruction sprites
@@ -66,90 +66,75 @@ class Guide extends Phaser.Scene{
         this.main_soldier.anims.play('walking');
         //this.crank_pu.anims.play('crank_anim')
 
-        this.physics.world.setBounds(0,40, 640, 430);
+        this.physics.world.setBounds(-50,40, 640, 430);
         //this.physics.world.gravity.y = 150;
         this.main_soldier.setVelocity(0,0)
 
 
 
-        this.mouse_tut = 0;
-        this.blocks_tut = 0;
-        this.crank_tut =0;
-        this.temp = 0;
-        this.timer = 0;
+        this.mouse = 0;
+        this.blocks = 0;
+        this.cranky = 0;
         this.controls = 0;
-
+        this.tutorial = 0;
+        this.timer = 0;
 
     }
 
     update() {
-    
 
-
-        //walking in
-        if(this.main_soldier.x < 100){
-            this.main_soldier.x += 1
-
-        } else{
-            if (this.temp == 0){
-                this.mi.setVisible(true);
-                this.ci.setVisible(true);
-                if (Phaser.Input.Keyboard.JustDown(this.space)) {
-                    this.controls = 1;
-                    this.temp = 1;
-                    this.mouse_tut = 1;
-                    this.mi.setVisible(false);
-                    this.ci.setVisible(false);
-                }
+        // walking in
+        if(this.tutorial == 0){
+            if(this.main_soldier.x < 75){
+                this.main_soldier.x += 1.5;
+            } else {
+                // show mouse
+                if (this.mouse == 0){
+                    this.controls = 0;
+                    this.mi.setVisible(true);
+                    this.ci.setVisible(true);
+                    if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                        this.mi.setVisible(false);
+                        this.ci.setVisible(false);
+                        this.controls = 1;
+                        this.mouse = 1;
+                    }
+                } if (this.mouse == 1 && this.blocks == 0){
+                    if (this.timer < 100){
+                        this.timer+=1;
+                    } else{
+                        this.controls = 0;
+                        this.bi.setVisible(true);
+                        this.ci.setVisible(true);
+                        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                            this.bi.setVisible(false);
+                            this.ci.setVisible(false);
+                            this.controls = 1;
+                            this.blocks = 1;
+                            this.timer = 0;
+                        }
+                    }
+                } if (this.mouse == 1 && this.blocks == 1 && this.cranky == 0){
+                    if (this.timer < 100){
+                        this.timer+=1;
+                    } else{
+                        this.controls = 0;
+                        this.cranki.setVisible(true);
+                        this.ci.setVisible(true);
+                        if (Phaser.Input.Keyboard.JustDown(this.space)) {
+                            this.cranki.setVisible(false);
+                            this.ci.setVisible(false);
+                            this.controls = 1;
+                            this.cranky = 1;
+                        }
+                    }
+                } 
             }
-
+            
         }
-
-        if (this.mouse_tut != 0){
-            if (this.timer < 1000){
-                this.timer += 5;
-            } else{
-                this.bi.setVisible(true);
-                this.ci.setVisible(true);
-                this.controls = 0;
-                this.timer = 0;
-                if (Phaser.Input.Keyboard.JustDown(this.space)) {
-                    this.blocks_tut = 1;
-                }
-                
-            }
-        }
-
-        if (this.blocks_tut !=0){
-            this.bi.setVisible(false);
-            this.ci.setVisible(false);
-            this.controls = 1;
-            if (this.timer < 1000){
-                
-                this.timer += 5;
-            } else{ 
-                this.cranki.setVisible(true);
-                this.ci.setVisible(true);
-                this.controls = 0;
-                this.timer = 0;
-                if (Phaser.Input.Keyboard.JustDown(this.space)) {
-                    this.crank_tut = 1;
-                }
-                
-            }
-
-
-        }
-
-        if(this.crank_tut == 1){
-            this.cranki.setVisible(false);
-            this.ci.setVisible(false);
-            this.controls = 1;
-        }
-
-        
-
-        if (this.controls != 0){
+        if (this.controls == 1){
+            this.livingroom.tilePositionX += game.settings.bg_speed / 4 * game.settings.multiplier;
+            this.floor.tilePositionX += game.settings.bg_speed * game.settings.multiplier;
             if (game.input.activePointer.isDown) {
                 this.main_soldier.setVelocityY(-game.settings.player_velocity * game.settings.multiplier * .75)
             } else{
@@ -158,17 +143,9 @@ class Guide extends Phaser.Scene{
 
         } else{
             this.main_soldier.setVelocity(0,0)
-        }
-
-        //update sprites
-        //this.crank_pu.update();
-        //this.blocks_obs.update()
-
-        //update bgs
-        if(this.controls == 1){
-            this.livingroom.tilePositionX += game.settings.bg_speed / 4 * game.settings.multiplier;
-            this.floor.tilePositionX += game.settings.bg_speed * game.settings.multiplier;
+            
         }
 
     }
 }
+
