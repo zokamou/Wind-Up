@@ -38,11 +38,13 @@ class Play extends Phaser.Scene{
 
         //add the crank
         this.crank_pu = new Crank(this, game.config.width *2, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 2).setOrigin(0, 0);
+        this.crank_pu.body.setSize(50,45);
+        this.crank_pu.body.setOffset(5,5);
 
         //add the soldier
         this.main_soldier = new Soldier(this, -50,150, 'soldier', 0).setOrigin(0, 0);
-        this.main_soldier.body.setSize(25,50);
-        this.main_soldier.body.setOffset(35,20);
+        this.main_soldier.body.setSize(35,75);
+        this.main_soldier.body.setOffset(30,5);
         //rounded rectangle
         this.graphics = this.add.graphics();
         this.graphics.fillStyle(0xdbc6a7, 1);
@@ -138,6 +140,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.main_soldier, this.crank_pu, () => {
             this.sound.play('collect');
             this.crank_pu.x += game.config.width;
+            this.crank_pu.setVelocityY(0)
             if (this.crank_prog > 280){
                 this.crank_prog = 300;
             }else{
