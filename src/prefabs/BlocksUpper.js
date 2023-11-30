@@ -5,6 +5,7 @@ class BlocksUpper extends Phaser.Physics.Arcade.Sprite{
         scene.physics.add.existing(this);
         this.moveSpeed = 1;
     }
+    
     update() {
         //move spaceship left
         this.x -= game.settings.bg_speed * game.settings.multiplier;

@@ -25,7 +25,7 @@ let config = {
     backgroundColor: "#482016",
     physics: {
         default: 'arcade',
-        arcade: { debug: false }
+        arcade: { debug: true }
     },
     scene: [Menu, Guide, Play]
 }

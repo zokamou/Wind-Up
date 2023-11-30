@@ -60,13 +60,13 @@ class Menu extends Phaser.Scene{
           bg_speed: 2,
           gameTimer: 45000    
         }
-        if(tut_tog == 0){
-          tut_tog = 1;
-          this.scene.start('guideScene');
-        }else{
-          this.scene.start('playScene');
-        }
-       // this.scene.start('playScene');
+        // if(tut_tog == 0){
+        //   tut_tog = 1;
+        //   this.scene.start('guideScene');
+        // }else{
+        //   this.scene.start('playScene');
+        // }
+        this.scene.start('playScene');
       });
 
       //credits button

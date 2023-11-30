@@ -15,17 +15,17 @@ class Play extends Phaser.Scene{
 
     }
     create() { 
+
         game.settings.multiplier = 1;
         this.bgM = this.sound.add('bgm');
         this.bgM.loop = true;
         this.bgM.play();
 
-
         //add bg
         this.livingroom = this.add.tileSprite(0,0,640, 480, 'livingroom').setOrigin(0,0);
         this.floor = this.add.tileSprite(0,0,640, 480, 'floor').setOrigin(0,0);
         
-        //add the soldier
+        //add the blocks
         this.blocks_lower = new BlocksUpper(this, game.config.width *1,200, 'blocks', 0).setOrigin(0, 0);
         this.blocks_lower.setScale(.75);
         this.blocks_lower.body.setSize(50,95);
@@ -35,8 +35,11 @@ class Play extends Phaser.Scene{
         this.blocks_upper.setScale(.75)
         this.blocks_upper.body.setSize(50,95);
         this.blocks_upper.body.setOffset(8,10);
+
+        //add the crank
         this.crank_pu = new Crank(this, game.config.width *2, (borderUISize*3) + (Math.random()*7)*borderUISize, 'crank', 2).setOrigin(0, 0);
 
+        //add the soldier
         this.main_soldier = new Soldier(this, -50,150, 'soldier', 0).setOrigin(0, 0);
         this.main_soldier.body.setSize(25,50);
         this.main_soldier.body.setOffset(35,20);
@@ -52,7 +55,6 @@ class Play extends Phaser.Scene{
         this.graphics.fillStyle(0xdbc6a7, 1);
         this.graphics.fillRoundedRect(this.game.config.width - 320, 20, 300, 40, 10);
 
-        
         this.bar = this.add.graphics();
         this.bar.fillStyle(0x37a113, 1);
         this.bar.fillRoundedRect(this.game.config.width - 320, 20, 300, 40,{ tl: 10, tr: 10, bl: 10, br: 10});
@@ -70,11 +72,11 @@ class Play extends Phaser.Scene{
         this.final.setVisible(false);
         this.hs_banner = this.add.text(game.config.width/2.9, game.config.height/1.9, "HIGH SCORE!", {align: "center",fontSize:'40px', fontFamily: "Love Ya Like A Sister", color: "red"});
         this.hs_banner.setVisible(false);
-        //this.add.rectangle(20, 22, 100,40, 0xdbc6a7).setOrigin(0, 0);
-        //this.bar.destroy();
 
+        //score
         this.score_txt = this.add.text(25,25, "Score:", {fontSize:'30px', fontFamily: "Love Ya Like A Sister", color: "#332818"});
-        // animation config
+
+        // animations
         this.anims.create({
             key: 'walking',
             frames: this.anims.generateFrameNumbers('soldier', { start: 0, end: 3, first: 0}),
@@ -92,7 +94,7 @@ class Play extends Phaser.Scene{
         //play animations
         this.crank_pu.anims.play('crank_anim');
         this.main_soldier.anims.play('walking');
-        //this.crank_pu.anims.play('crank_anim');
+        this.crank_pu.anims.play('crank_anim');
 
         this.physics.world.setBounds(-50,40, 640, 420);
         //this.physics.world.gravity.y = 150;
@@ -106,6 +108,42 @@ class Play extends Phaser.Scene{
 
         this.keyB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.physics.add.collider(this.main_soldier, this.blocks_lower, () => {
+            this.sound.play('explosion');
+            this.bgM.play();
+            this.blocks_lower.x +=  game.config.width;
+            this.blocks_lower.y = game.config.height - (Math.random()*100) - 125
+            this.blocks_lower.setVelocityY(0)
+            if(this.crank_prog >= 50){
+                this.crank_prog -= 50;
+            } else{
+                this.crank_prog = 0;
+            }
+        })
+
+        this.physics.add.collider(this.main_soldier, this.blocks_upper, () => {
+            this.sound.play('explosion');
+            this.bgM.play();
+            this.blocks_upper.x +=  game.config.width;
+            this.blocks_upper.y = game.config.height - (Math.random()*100) - 125
+            this.blocks_upper.setVelocityY(0)
+            if(this.crank_prog >= 50){
+                this.crank_prog -= 50;
+            } else{
+                this.crank_prog = 0;
+            }
+        })
+
+        this.physics.add.collider(this.main_soldier, this.crank_pu, () => {
+            this.sound.play('collect');
+            this.crank_pu.x += game.config.width;
+            if (this.crank_prog > 280){
+                this.crank_prog = 300;
+            }else{
+                this.crank_prog += 30;
+            }
+        })
         
 
     }
@@ -150,37 +188,7 @@ class Play extends Phaser.Scene{
             this.intro = 1
         }
 
-        if(this.checkCollision(this.main_soldier, this.blocks_lower)) {
-            this.sound.play('explosion');
-            this.bgM.play();
-            this.blocks_lower.x +=  game.config.width;
-            this.blocks_lower.y = game.config.height - (Math.random()*100) - 125
-            if(this.crank_prog >= 50){
-                this.crank_prog -= 50;
-            } else{
-                this.crank_prog = 0;
-            }
-        }
-        if(this.checkCollision(this.main_soldier, this.blocks_upper)) {
-            this.sound.play('explosion');
-            this.bgM.play();
-            this.blocks_upper.x += game.config.width;
-            this.blocks_upper.y = game.config.height - (Math.random()*100) - 125
-            if(this.crank_prog >= 50){
-                this.crank_prog -= 50;
-            } else{
-                this.crank_prog = 0;
-            }
-        }
-        if(this.checkCollision(this.main_soldier, this.crank_pu)) {
-            this.sound.play('collect');
-            this.crank_pu.x += game.config.width;
-            if (this.crank_prog > 280){
-                this.crank_prog = 300;
-            }else{
-                this.crank_prog += 30;
-            }
-        }
+        
 
         //updates
         if(this.intro == 1 && this.go == 0){
@@ -223,17 +231,4 @@ class Play extends Phaser.Scene{
     }
 
 
-checkCollision(soldier, enemy) {
-    // simple AABB checking
-    if (soldier.x < enemy.x + enemy.width-10 && 
-      soldier.x + soldier.width-10 > enemy.x && 
-      soldier.y < enemy.y + enemy.height-20 &&
-      soldier.height-20 + soldier.y > enemy. y) {
-      return true;
-    } else {
-      return false;
-    }
-
-
-  }
 }
